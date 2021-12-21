@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <!--    mvp.css-->
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    <!--    jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+    <script>
+        // 유저 저장
+        function save() {
+            let name = $("#name").val()
+            let email = $("#email").val()
+            let id = $("#id").val()
+            let pw = $("#pw").val()
+
+            $.ajax({
+                type: "POST",
+                url: "/join",
+                data: {name_give: name, email_give: email, id_give: id, pw_give: pw},
+                success: function (response) {
+                    alert(response["msg"]);
+                    location.replace("/")
+                }
+            })
+
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="/">로그인페이지</a></li>
+            <li><a href="/join">회원가입</a></li>
+        </ul>
+    </header>
+    <form>
+        <input type="text" placeholder="Name" id="name">
+        <br>
+        <input type="text" placeholder="Email" id="email">
+        <br>
+        <input type="text" placeholder="ID" id="id">
+        <br>
+        <input type="text" placeholder="PW" id="pw">
+        <br>
+        <button onclick="save()" type="submit" >생성하기</button>
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>홈페이지</title>
+    <!--    mvp.css-->
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    <!--    jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+    <script>
+
+        function login(){
+            let id = $("#id").val()
+            let pw = $("#pw").val()
+
+            $.ajax({
+                type: "POST",
+                url: "/index",
+                data: {id_give: id, pw_give: pw},
+                success: function (response) {
+
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <ul>
+            <li><a href="/">로그인페이지</a></li>
+            <li><a href="/join">회원가입</a></li>
+        </ul>
+    </header>
+    {% if login == False %}
+    <form>
+        <input type="text" placeholder="ID" id="id">
+        <br>
+        <input type="text" placeholder="PW" id="pw">
+        <br>
+        <button onclick="login()" type="submit">로그인</button>
+    </form>
+    {%else %}
+    <h3>Welcome {{username}}</h3>
+    <br>
+    <a href="/logout">로그아웃</a>
+    {%endif%}
+</body>
+</html>
