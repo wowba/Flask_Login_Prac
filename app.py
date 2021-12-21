@@ -1,6 +1,6 @@
 # Before Run, install Flask, requests, pymongo. It uses MongoDB
 
-from flask import Flask, render_template, jsonify, request, session
+from flask import Flask, render_template, jsonify, request, session , redirect
 
 app = Flask(__name__)
 
@@ -23,10 +23,6 @@ def home():
 @app.route("/join")
 def join():
     return render_template("join.html")
-
-@app.route("/mypage")
-def mypage():
-    return render_template("mypage.html")
 
 ## 유저 생성
 
@@ -57,25 +53,24 @@ def login():
 
     id_user = db.users.find_one({'id': id_receive})
     pw_user = db.users.find_one({'pw': pw_receive})
-    print("Login Check:",id_user,pw_user)
+    print("Login Check:",id_user["id"],pw_user["pw"])
         ## id, pw 일치 확인
     if id_user == None or pw_user == None:
         print("Wrong Account")
-        return render_template("index.html")
+        return redirect("/")
     else:
         print("Correct Account")
         ## 세션에 id 저장하기
         session["userID"] = id_receive
         ## 세션 확인
         print(session)
-
-        return render_template("index.html")
+        return redirect("/")
 
 @app.route("/logout")
 def logout():
     ## 세션 삭제
     session.pop("userID")
-    return render_template("index.html")
+    return redirect("/")
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

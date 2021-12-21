@@ -25,7 +25,7 @@
                 url: "/index",
                 data: {id_give: id, pw_give: pw},
                 success: function (response) {
-
+                    return window.location.reload()
                 }
             })
         }
@@ -45,7 +45,7 @@
         <br>
         <input type="text" placeholder="PW" id="pw">
         <br>
-        <button onclick="login()" type="submit">로그인</button>
+        <button onclick="login()" type="button">로그인</button>
     </form>
     {%else %}
     <h3>Welcome {{username}}</h3>
