@@ -10,10 +10,10 @@ app.secret_key = 'VerySecretKey'
 from pymongo import MongoClient
 
 # localhost용 MongoDB 연결
-# client = MongoClient("localhost", 27017)
+client = MongoClient("localhost", 27017)
 
 # 서버용 MongoDB 연결
-client = MongoClient('mongodb://test:test@localhost', 27017)
+# client = MongoClient('mongodb://test:test@localhost', 27017)
 
 db = client.sideprojectlogin
 
