@@ -8,15 +8,35 @@
     <!--    jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
-        body{
+        body {
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
+        }
+
+        #welcome {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: solid 5px black;
+            border-top: solid 5px black;
+            padding: 20px 100px 20px 100px;
+        }
+
+        #login_form {
+            margin-bottom: 40px;
         }
     </style>
     <script>
 
-        function login(){
+        $(document).ready(function () {
+            show_noticeboards()
+        });
+
+
+        function login() {
             let id = $("#id").val()
             let pw = $("#pw").val()
 
@@ -29,28 +49,83 @@
                 }
             })
         }
+
+        function show_noticeboards() {
+            $.ajax({
+                type: "GET",
+                url: "/show",
+                data: {},
+                success: function (response) {
+                    let noticeboards = response["all_noticeboards"]
+                    for (let i = 0; i < noticeboards.length; i++) {
+                        let title = noticeboards[i]["title"]
+                        let username = noticeboards[i]["username"]
+                        let time = noticeboards[i]["time"]
+
+                        let temp_html = `<tr>
+                                            <td>${i + 1}</td>
+                                            <td><a href="/view?${time}">${title}</a></td>
+                                            <td>${username}</td>
+                                        </tr>`
+                        $("#noticeboards").append(temp_html)
+                    }
+                }
+            })
+        }
+
+        function delete_noticeboards() {
+            $.ajax({
+                type: "POST",
+                url: "/delete",
+                data: {},
+                success: function (response) {
+                    return window.location.reload()
+                }
+            })
+        }
+
     </script>
 </head>
 <body>
 
-    <header>
-        <ul>
-            <li><a href="/">로그인페이지</a></li>
-            <li><a href="/join">회원가입</a></li>
-        </ul>
-    </header>
-    {% if login == False %}
-    <form>
-        <input type="text" placeholder="ID" id="id">
-        <br>
-        <input type="text" placeholder="PW" id="pw">
-        <br>
-        <button onclick="login()" type="button">로그인</button>
-    </form>
-    {%else %}
-    <h3>Welcome {{username}}</h3>
+<header>
+    <ul>
+        {% if login == False %}
+        <li><a href="/">로그인페이지</a></li>
+        <li><a href="/join">회원가입</a></li>
+        {%else %}
+        <li><a href="/">메인페이지</a></li>
+        <li><a href="/write">글쓰기</a></li>
+        {%endif%}
+    </ul>
+</header>
+
+{% if login == False %}
+<form id="login_form">
+    <input type="text" placeholder="ID" id="id" required>
     <br>
+    <input type="text" placeholder="PW" id="pw" required>
+    <br>
+    <button onclick="login()" type="button">로그인</button>
+</form>
+{%else %}
+<div id="welcome">
+    <h3>Welcome {{username}}</h3>
     <a href="/logout">로그아웃</a>
+</div>
+{%endif%}
+<table>
+    <thead>
+    <th>순서</th>
+    <th>제목</th>
+    <th>글쓴이</th>
+    </thead>
+    <tbody id="noticeboards">
+    </tbody>
+    {% if login == False %}
+    {%else %}
+    <button onclick="delete_noticeboards()" type="button">모든 게시글 제거</button>
     {%endif%}
+</table>
 </body>
 </html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글</title>
+    <!--    mvp.css-->
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    <!--    jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+    <script>
+
+    </script>
+</head>
+<body>
+    <header>
+        <ul>
+            {% if login == False %}
+            <li><a href="/">로그인페이지</a></li>
+            <li><a href="/join">회원가입</a></li>
+            {%else %}
+            <li><a href="/">메인페이지</a></li>
+            <li><a href="/write">글쓰기</a></li>
+            {%endif%}
+        </ul>
+    </header>
+    <form>
+        {{content}}
+        <button type="button" >수정하기</button>
+    </form>
+
+</body>
+</html>

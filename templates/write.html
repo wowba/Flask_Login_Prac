@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>회원가입</title>
+    <title>글쓰기</title>
     <!--    mvp.css-->
     <link rel="stylesheet" href="https://unpkg.com/mvp.css">
     <!--    jQuery-->
@@ -15,20 +15,18 @@
         }
     </style>
     <script>
-        // 유저 저장
+        // 게시글 저장
         function save() {
-            let name = $("#name").val()
-            let email = $("#email").val()
-            let id = $("#id").val()
-            let pw = $("#pw").val()
+            let title = $("#title").val()
+            let content = $("#content").val()
 
             $.ajax({
                 type: "POST",
-                url: "/join",
-                data: {name_give: name, email_give: email, id_give: id, pw_give: pw},
+                url: "/write",
+                data: {title_give:title, content_give:content},
                 success: function (response) {
                     alert(response["msg"]);
-                    location.replace("/")
+                    return location.replace("/")
                 }
             })
 
@@ -42,20 +40,17 @@
             <li><a href="/">로그인페이지</a></li>
             <li><a href="/join">회원가입</a></li>
             {%else %}
+            <li><a href="/">메인페이지</a></li>
             <li><a href="/write">글쓰기</a></li>
             {%endif%}
         </ul>
     </header>
     <form>
-        <input type="text" placeholder="Name" id="name",required>
+        <input type="text" placeholder="Title" id="title" required>
         <br>
-        <input type="text" placeholder="Email" id="email",required>
+        <input type="text" placeholder="Content" id="content" required>
         <br>
-        <input type="text" placeholder="ID" id="id",required>
-        <br>
-        <input type="text" placeholder="PW" id="pw",required>
-        <br>
-        <button onclick="save()" type="button" >생성하기</button>
+        <button onclick="save()" type="button" >작성하기</button>
     </form>
 
 </body>

@@ -9,20 +9,45 @@ app.secret_key = 'VerySecretKey'
 
 from pymongo import MongoClient
 
+# localhost용 MongoDB 연결
 client = MongoClient("localhost", 27017)
+
+# 서버용 MongoDB 연결
+# client = MongoClient('mongodb://test:test@localhost', 27017)
+
 db = client.sideprojectlogin
+
+# 데이터 관리용 time
+import time
 
 ## HTML 화면 렌더링
 @app.route("/")
 def home():
     if "userID" in session:
-        return render_template("index.html",username = session.get("userID"),login = True)
+        return render_template("index.html",username = session.get("userID"),login = True,)
     else:
-        return render_template("index.html",login = False)
+        return render_template("index.html",login = False,)
 
 @app.route("/join")
 def join():
-    return render_template("join.html")
+    if "userID" in session:
+        return render_template("join.html", username=session.get("userID"), login=True)
+    else:
+        return render_template("join.html", login=False)
+
+@app.route("/write")
+def write():
+    if "userID" in session:
+        return render_template("write.html", username=session.get("userID"), login=True)
+    else:
+        return render_template("join.html", login=False)
+
+@app.route("/view")
+def view():
+    if "userID" in session:
+        return render_template("view.html", username=session.get("userID"), login=True)
+    else:
+        return render_template("view.html", login=False)
 
 ## 유저 생성
 
@@ -66,11 +91,54 @@ def login():
         print(session)
         return redirect("/")
 
+## 세션 삭제
+
 @app.route("/logout")
 def logout():
-    ## 세션 삭제
     session.pop("userID")
     return redirect("/")
+
+
+## 게시글 작성
+
+@app.route("/write", methods=["POST"])
+def save_write():
+    title_receive = request.form["title_give"]
+    content_receive = request.form["content_give"]
+    username = session.get("userID")
+    secs = str(time.time())
+    print(secs)
+
+    ## 데이터베이스에 저장
+    doc = {
+        "time":secs,
+        "title":title_receive,
+        "content":content_receive,
+        "username":username
+    }
+    print(doc)
+    db.noticeboard.insert_one(doc)
+
+    return jsonify({"msg": "생성 완료"})
+
+## 게시글 표시
+
+@app.route("/show", methods=["GET"])
+def show_write():
+    noticeboards = list(db.noticeboard.find({},{"_id":False}))
+    return jsonify({"all_noticeboards":noticeboards})
+
+## 게시글 삭제
+
+@app.route("/delete", methods=["POST"])
+def delete_noticeboards():
+    db.noticeboard.delete_many({})
+    print("모든 게시글 제거")
+    return redirect("/")
+
+## 게시글 보기
+
+## 포트
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
