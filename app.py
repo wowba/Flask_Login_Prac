@@ -2,6 +2,15 @@
 
 from flask import Flask, render_template, jsonify, request, session, redirect
 
+# dotenv 사용 연습 (.env 파일은 .gitignore로 항상 빼주기!)
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+database = os.getenv("DATABASE")
+print(database)
+
+# Flask app 설정
 app = Flask(__name__)
 
 # session 시크릿 키
@@ -17,7 +26,7 @@ client = MongoClient("localhost", 27017)
 
 db = client.sideprojectlogin
 
-# 데이터 관리용 time
+# 임시 데이터 관리용 time
 import time
 
 ## HTML 화면 렌더링
