@@ -133,7 +133,9 @@ def save_write():
 @app.route("/show", methods=["GET"])
 def show_write():
     noticeboards = list(db.noticeboard.find({},{"_id":False}))
-    return jsonify({"all_noticeboards":noticeboards})
+    idtest = db.noticeboard.find_one({})
+    print(idtest["_id"])
+    return jsonify({"all_noticeboards":noticeboards,})
 
 ## 게시글 삭제
 
